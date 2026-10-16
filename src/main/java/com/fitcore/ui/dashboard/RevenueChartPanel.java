@@ -1,6 +1,7 @@
 package com.fitcore.ui.dashboard;
 
 import com.fitcore.model.MonthlyRevenue;
+import com.fitcore.ui.theme.Theme;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -14,11 +15,10 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import javax.swing.*;
 import java.awt.*;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Chart component rendering monthly revenue collections using JFreeChart.
+ * Chart component rendering monthly revenue collections using dark theme JFreeChart.
  */
 public class RevenueChartPanel extends JPanel {
 
@@ -27,16 +27,16 @@ public class RevenueChartPanel extends JPanel {
 
     public RevenueChartPanel() {
         setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
+        setBackground(Theme.BG_CARD);
         setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(226, 232, 240), 1),
-                BorderFactory.createEmptyBorder(12, 12, 12, 12)
+                BorderFactory.createLineBorder(Theme.BORDER_SUBTLE, 1, true),
+                BorderFactory.createEmptyBorder(14, 16, 14, 16)
         ));
 
         JFreeChart chart = ChartFactory.createBarChart(
                 "Monthly Revenue Trends ($)",
-                "Month",
-                "Total Collected ($)",
+                "Billing Period",
+                "Total Collections ($)",
                 dataset,
                 PlotOrientation.VERTICAL,
                 false, // legend
@@ -44,32 +44,36 @@ public class RevenueChartPanel extends JPanel {
                 false  // urls
         );
 
-        chart.setBackgroundPaint(Color.WHITE);
-        chart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 14));
-        chart.getTitle().setPaint(new Color(15, 23, 42));
+        chart.setBackgroundPaint(Theme.BG_CARD);
+        chart.getTitle().setFont(Theme.bold(14));
+        chart.getTitle().setPaint(Theme.TEXT_PRIMARY);
 
         CategoryPlot plot = chart.getCategoryPlot();
-        plot.setBackgroundPaint(new Color(248, 250, 252));
-        plot.setDomainGridlinePaint(new Color(226, 232, 240));
-        plot.setRangeGridlinePaint(new Color(226, 232, 240));
+        plot.setBackgroundPaint(new Color(15, 23, 42)); // #0F172A
+        plot.setDomainGridlinePaint(Theme.BORDER_SUBTLE);
+        plot.setRangeGridlinePaint(Theme.BORDER_SUBTLE);
         plot.setOutlineVisible(false);
 
         CategoryAxis domainAxis = plot.getDomainAxis();
-        domainAxis.setTickLabelFont(new Font("Segoe UI", Font.PLAIN, 11));
-        domainAxis.setLabelFont(new Font("Segoe UI", Font.BOLD, 12));
+        domainAxis.setTickLabelFont(Theme.font(11));
+        domainAxis.setTickLabelPaint(Theme.TEXT_SECONDARY);
+        domainAxis.setLabelFont(Theme.bold(11));
+        domainAxis.setLabelPaint(Theme.TEXT_SECONDARY);
 
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setTickLabelFont(new Font("Segoe UI", Font.PLAIN, 11));
-        rangeAxis.setLabelFont(new Font("Segoe UI", Font.BOLD, 12));
+        rangeAxis.setTickLabelFont(Theme.font(11));
+        rangeAxis.setTickLabelPaint(Theme.TEXT_SECONDARY);
+        rangeAxis.setLabelFont(Theme.bold(11));
+        rangeAxis.setLabelPaint(Theme.TEXT_SECONDARY);
 
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setBarPainter(new StandardBarPainter());
-        renderer.setSeriesPaint(0, new Color(37, 99, 235)); // electric blue
+        renderer.setSeriesPaint(0, Theme.ACCENT_PRIMARY); // Electric Indigo
         renderer.setMaximumBarWidth(0.08);
 
         chartPanel = new ChartPanel(chart);
         chartPanel.setOpaque(false);
-        chartPanel.setBackground(Color.WHITE);
+        chartPanel.setBackground(Theme.BG_CARD);
         chartPanel.setDisplayToolTips(true);
         add(chartPanel, BorderLayout.CENTER);
     }

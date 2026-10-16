@@ -24,26 +24,24 @@ public class AuditLogPanel extends JPanel {
         this.auditService = auditService;
 
         setLayout(new BorderLayout());
-        setBackground(new Color(248, 250, 252));
-        setBorder(BorderFactory.createEmptyBorder(20, 24, 24, 24));
+        setBackground(com.fitcore.ui.theme.Theme.BG_APP);
+        setBorder(BorderFactory.createEmptyBorder(24, 28, 28, 28));
 
         JPanel top = new JPanel(new BorderLayout());
         top.setOpaque(false);
         top.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
 
-        JLabel title = new JLabel("System Security & Administrative Audit Trail");
-        title.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        title.setForeground(new Color(15, 23, 42));
+        JLabel title = new JLabel("System Security & Compliance Audit Trail");
+        title.setFont(com.fitcore.ui.theme.Theme.bold(22));
+        title.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
 
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         actions.setOpaque(false);
 
-        JButton refreshBtn = new JButton("🔄 Refresh Logs");
-        refreshBtn.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        JButton refreshBtn = com.fitcore.ui.theme.Theme.createGhostButton("🔄  Sync Audit Logs");
         refreshBtn.addActionListener(e -> refreshData());
 
-        JButton exportBtn = new JButton("📥 Export Audit CSV");
-        exportBtn.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        JButton exportBtn = com.fitcore.ui.theme.Theme.createGhostButton("📥  Export Audit CSV");
         exportBtn.addActionListener(e -> ExportUtil.exportTableToCsv(this, table, "FitCore_Security_Audit_Logs"));
 
         actions.add(refreshBtn);

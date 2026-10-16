@@ -1,6 +1,7 @@
 package com.fitcore.ui.dashboard;
 
 import com.fitcore.model.PlanDistribution;
+import com.fitcore.ui.theme.Theme;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -21,20 +22,20 @@ public class PlanDistributionChartPanel extends JPanel {
     private final PiePlot<String> plot;
 
     private static final Color[] PALETTE = {
-            new Color(16, 185, 129), // emerald-500
-            new Color(59, 130, 246), // blue-500
-            new Color(245, 158, 11), // amber-500
-            new Color(139, 92, 246), // violet-500
-            new Color(236, 72, 153), // pink-500
-            new Color(20, 184, 166)  // teal-500
+            Theme.ACCENT_PRIMARY,   // Electric Indigo (#6366F1)
+            Theme.ACCENT_EMERALD,   // Neon Emerald (#10B981)
+            Theme.ACCENT_CYAN,      // Cyber Cyan (#06B6D4)
+            Theme.ACCENT_AMBER,     // Amber Gold (#F59E0B)
+            Theme.ACCENT_PURPLE,    // Neon Purple (#A855F7)
+            Theme.ACCENT_ROSE       // Vibrant Rose (#F43F5E)
     };
 
     public PlanDistributionChartPanel() {
         setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
+        setBackground(Theme.BG_CARD);
         setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(226, 232, 240), 1),
-                BorderFactory.createEmptyBorder(12, 12, 12, 12)
+                BorderFactory.createLineBorder(Theme.BORDER_SUBTLE, 1, true),
+                BorderFactory.createEmptyBorder(14, 16, 14, 16)
         ));
 
         JFreeChart chart = ChartFactory.createPieChart(
@@ -45,21 +46,28 @@ public class PlanDistributionChartPanel extends JPanel {
                 false // urls
         );
 
-        chart.setBackgroundPaint(Color.WHITE);
-        chart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 14));
-        chart.getTitle().setPaint(new Color(15, 23, 42));
+        chart.setBackgroundPaint(Theme.BG_CARD);
+        chart.getTitle().setFont(Theme.bold(14));
+        chart.getTitle().setPaint(Theme.TEXT_PRIMARY);
+
+        if (chart.getLegend() != null) {
+            chart.getLegend().setBackgroundPaint(Theme.BG_CARD);
+            chart.getLegend().setItemFont(Theme.font(11));
+            chart.getLegend().setItemPaint(Theme.TEXT_SECONDARY);
+        }
 
         plot = (PiePlot<String>) chart.getPlot();
-        plot.setBackgroundPaint(Color.WHITE);
+        plot.setBackgroundPaint(Theme.BG_CARD);
         plot.setOutlineVisible(false);
-        plot.setLabelFont(new Font("Segoe UI", Font.PLAIN, 11));
-        plot.setLabelBackgroundPaint(new Color(248, 250, 252));
-        plot.setLabelOutlinePaint(new Color(203, 213, 225));
+        plot.setLabelFont(Theme.font(11));
+        plot.setLabelPaint(Theme.TEXT_PRIMARY);
+        plot.setLabelBackgroundPaint(new Color(24, 33, 53));
+        plot.setLabelOutlinePaint(Theme.BORDER_SUBTLE);
         plot.setShadowPaint(null);
 
         chartPanel = new ChartPanel(chart);
         chartPanel.setOpaque(false);
-        chartPanel.setBackground(Color.WHITE);
+        chartPanel.setBackground(Theme.BG_CARD);
         chartPanel.setDisplayToolTips(true);
         add(chartPanel, BorderLayout.CENTER);
     }
@@ -78,7 +86,7 @@ public class PlanDistributionChartPanel extends JPanel {
         }
         if (dataset.getItemCount() == 0) {
             dataset.setValue("No Subscriptions Recorded", 1);
-            plot.setSectionPaint("No Subscriptions Recorded", new Color(203, 213, 225));
+            plot.setSectionPaint("No Subscriptions Recorded", Theme.BORDER_SUBTLE);
         }
     }
 }

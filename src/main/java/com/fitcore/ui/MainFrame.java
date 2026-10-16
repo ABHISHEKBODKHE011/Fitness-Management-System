@@ -122,6 +122,7 @@ public class MainFrame extends JFrame {
         // 2. Central Card Layout container
         cardLayout = new CardLayout();
         cardsPanel = new JPanel(cardLayout);
+        cardsPanel.setBackground(com.fitcore.ui.theme.Theme.BG_APP);
 
         // Instantiate view panels
         dashboardPanel = new DashboardPanel(
@@ -163,6 +164,7 @@ public class MainFrame extends JFrame {
         add(sidebar, BorderLayout.WEST);
 
         JPanel centerContainer = new JPanel(new BorderLayout());
+        centerContainer.setBackground(com.fitcore.ui.theme.Theme.BG_APP);
         centerContainer.add(topBar, BorderLayout.NORTH);
         centerContainer.add(cardsPanel, BorderLayout.CENTER);
 

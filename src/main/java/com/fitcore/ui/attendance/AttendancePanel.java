@@ -36,8 +36,8 @@ public class AttendancePanel extends JPanel {
         this.memberService = memberService;
 
         setLayout(new BorderLayout());
-        setBackground(new Color(248, 250, 252));
-        setBorder(BorderFactory.createEmptyBorder(20, 24, 24, 24));
+        setBackground(com.fitcore.ui.theme.Theme.BG_APP);
+        setBorder(BorderFactory.createEmptyBorder(24, 28, 28, 28));
 
         add(createTopControlPanel(), BorderLayout.NORTH);
         add(createTablePanel(), BorderLayout.CENTER);
@@ -46,16 +46,16 @@ public class AttendancePanel extends JPanel {
     }
 
     private JPanel createTopControlPanel() {
-        JPanel panel = new JPanel(new BorderLayout(0, 12));
+        JPanel panel = new JPanel(new BorderLayout(0, 14));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
 
         JPanel titleRow = new JPanel(new BorderLayout());
         titleRow.setOpaque(false);
 
-        JLabel titleLbl = new JLabel("Daily Attendance & Check-in Roster");
-        titleLbl.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        titleLbl.setForeground(new Color(15, 23, 42));
+        JLabel titleLbl = new JLabel("Daily Attendance & Check-in Desk");
+        titleLbl.setFont(com.fitcore.ui.theme.Theme.bold(22));
+        titleLbl.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
         titleRow.add(titleLbl, BorderLayout.WEST);
 
         // Date filter controls
@@ -63,22 +63,40 @@ public class AttendancePanel extends JPanel {
         filterRow.setOpaque(false);
 
         fromDateField = new JTextField(DateTimeUtil.formatDateIso(LocalDate.now().minusDays(7)), 9);
+        fromDateField.setFont(com.fitcore.ui.theme.Theme.font(12));
+        fromDateField.setBackground(com.fitcore.ui.theme.Theme.BG_INPUT);
+        fromDateField.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
+
         toDateField = new JTextField(DateTimeUtil.formatDateIso(LocalDate.now()), 9);
+        toDateField.setFont(com.fitcore.ui.theme.Theme.font(12));
+        toDateField.setBackground(com.fitcore.ui.theme.Theme.BG_INPUT);
+        toDateField.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
+
         searchField = new JTextField(14);
-        searchField.putClientProperty("JTextField.placeholderText", "Search member...");
+        searchField.putClientProperty("JTextField.placeholderText", "🔍 Search...");
+        searchField.setFont(com.fitcore.ui.theme.Theme.font(12));
+        searchField.setBackground(com.fitcore.ui.theme.Theme.BG_INPUT);
+        searchField.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
+        searchField.setCaretColor(com.fitcore.ui.theme.Theme.ACCENT_CYAN);
         searchField.addActionListener(e -> refreshData());
 
-        JButton filterBtn = new JButton("Filter");
-        filterBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        JButton filterBtn = com.fitcore.ui.theme.Theme.createGhostButton("Filter");
         filterBtn.addActionListener(e -> refreshData());
 
-        JButton todayBtn = new JButton("Today Only");
-        todayBtn.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        JButton todayBtn = com.fitcore.ui.theme.Theme.createGhostButton("Today Only");
         todayBtn.addActionListener(e -> loadTodayData());
 
-        filterRow.add(new JLabel("From:"));
+        JLabel fromLbl = new JLabel("From:");
+        fromLbl.setFont(com.fitcore.ui.theme.Theme.bold(11));
+        fromLbl.setForeground(com.fitcore.ui.theme.Theme.TEXT_SECONDARY);
+
+        JLabel toLbl = new JLabel("To:");
+        toLbl.setFont(com.fitcore.ui.theme.Theme.bold(11));
+        toLbl.setForeground(com.fitcore.ui.theme.Theme.TEXT_SECONDARY);
+
+        filterRow.add(fromLbl);
         filterRow.add(fromDateField);
-        filterRow.add(new JLabel("To:"));
+        filterRow.add(toLbl);
         filterRow.add(toDateField);
         filterRow.add(searchField);
         filterRow.add(filterBtn);
@@ -90,10 +108,10 @@ public class AttendancePanel extends JPanel {
         JPanel actionRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         actionRow.setOpaque(false);
 
-        JButton checkInBtn = createActionButton("⏱ Quick Check-in", new Color(16, 185, 129), Color.WHITE);
+        JButton checkInBtn = com.fitcore.ui.theme.Theme.createSuccessButton("⏱  Quick Check-in");
         checkInBtn.addActionListener(e -> onCheckIn());
 
-        JButton exportBtn = createActionButton("📥 Export Attendance CSV", new Color(241, 245, 249), new Color(30, 41, 59));
+        JButton exportBtn = com.fitcore.ui.theme.Theme.createGhostButton("📥  Export Attendance CSV");
         exportBtn.addActionListener(e -> ExportUtil.exportTableToCsv(this, table, "FitCore_Attendance_Logs"));
 
         actionRow.add(checkInBtn);
@@ -106,7 +124,7 @@ public class AttendancePanel extends JPanel {
 
     private JPanel createTablePanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(com.fitcore.ui.theme.Theme.BG_CARD);
 
         tableModel = new DefaultTableModel(
                 new String[]{"Check-in Time", "Date", "Member Code", "Member Name", "Phone", "Membership Status", "Session Notes"}, 0
@@ -123,7 +141,7 @@ public class AttendancePanel extends JPanel {
                 StatusBadge badge = new StatusBadge(value != null ? value.toString() : "ACTIVE");
                 JPanel p = new JPanel(new GridBagLayout());
                 p.setOpaque(true);
-                p.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? Color.WHITE : new Color(248, 250, 252)));
+                p.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? table.getBackground() : new Color(14, 20, 33)));
                 p.add(badge);
                 return p;
             }

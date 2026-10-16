@@ -1,7 +1,10 @@
 package com.fitcore.ui.components;
 
+import com.fitcore.ui.theme.Theme;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 
 /**
  * Metric summary card displaying KPI values, icons, and trends with modern card styling.
@@ -14,34 +17,42 @@ public class StatCard extends JPanel {
     private final Color accentColor;
 
     public StatCard(String title, String initialValue, String subtitle, Color accentColor) {
-        this.accentColor = accentColor != null ? accentColor : new Color(37, 99, 235);
+        this.accentColor = accentColor != null ? accentColor : Theme.ACCENT_PRIMARY;
         setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
-        setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(226, 232, 240), 1),
-                BorderFactory.createEmptyBorder(16, 20, 16, 20)
-        ));
+        setOpaque(false);
+        setBorder(BorderFactory.createEmptyBorder(18, 20, 18, 20));
 
         JPanel contentPanel = new JPanel();
         contentPanel.setOpaque(false);
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
+        // Top Row: Category title and glowing pill indicator
+        JPanel topRow = new JPanel(new BorderLayout());
+        topRow.setOpaque(false);
+
         titleLabel = new JLabel(title.toUpperCase());
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 11));
-        titleLabel.setForeground(new Color(100, 116, 139)); // slate-500
+        titleLabel.setFont(Theme.bold(10));
+        titleLabel.setForeground(Theme.TEXT_MUTED);
+
+        JLabel glowPill = new JLabel("●");
+        glowPill.setFont(Theme.bold(12));
+        glowPill.setForeground(this.accentColor);
+
+        topRow.add(titleLabel, BorderLayout.WEST);
+        topRow.add(glowPill, BorderLayout.EAST);
 
         valueLabel = new JLabel(initialValue);
-        valueLabel.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        valueLabel.setForeground(new Color(15, 23, 42)); // navy-900
+        valueLabel.setFont(Theme.bold(28));
+        valueLabel.setForeground(Theme.TEXT_PRIMARY);
 
         subtitleLabel = new JLabel(subtitle != null ? subtitle : "");
-        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        subtitleLabel.setForeground(new Color(71, 85, 105)); // slate-600
+        subtitleLabel.setFont(Theme.font(12));
+        subtitleLabel.setForeground(Theme.TEXT_SECONDARY);
 
-        contentPanel.add(titleLabel);
-        contentPanel.add(Box.createVerticalStrut(6));
+        contentPanel.add(topRow);
+        contentPanel.add(Box.createVerticalStrut(8));
         contentPanel.add(valueLabel);
-        contentPanel.add(Box.createVerticalStrut(4));
+        contentPanel.add(Box.createVerticalStrut(6));
         contentPanel.add(subtitleLabel);
 
         add(contentPanel, BorderLayout.CENTER);
@@ -57,11 +68,23 @@ public class StatCard extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        // Paint top colored accent bar
         Graphics2D g2 = (Graphics2D) g.create();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Dark card background
+        g2.setColor(Theme.BG_CARD);
+        g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 16, 16));
+
+        // Subtle 1px border
+        g2.setColor(Theme.BORDER_SUBTLE);
+        g2.setStroke(new BasicStroke(1f));
+        g2.draw(new RoundRectangle2D.Float(0.5f, 0.5f, getWidth() - 1, getHeight() - 1, 16, 16));
+
+        // Left accent bar
         g2.setColor(accentColor);
-        g2.fillRect(0, 0, getWidth(), 4);
+        g2.fill(new RoundRectangle2D.Float(0, 12, 4, getHeight() - 24, 4, 4));
+
         g2.dispose();
+        super.paintComponent(g);
     }
 }

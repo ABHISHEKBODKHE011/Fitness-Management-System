@@ -95,17 +95,13 @@ public class CheckInDialog extends JDialog {
         onSearch();
 
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 14));
-        buttons.setBackground(new Color(248, 250, 252));
-        buttons.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(226, 232, 240)));
+        buttons.setBackground(com.fitcore.ui.theme.Theme.BG_CARD);
+        buttons.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, com.fitcore.ui.theme.Theme.BORDER_SUBTLE));
 
-        JButton cancelBtn = new JButton("Cancel");
+        JButton cancelBtn = com.fitcore.ui.theme.Theme.createGhostButton("Cancel");
         cancelBtn.addActionListener(e -> dispose());
 
-        confirmBtn = new JButton("Record Check-in");
-        confirmBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        confirmBtn.setBackground(new Color(16, 185, 129)); // emerald-500
-        confirmBtn.setForeground(Color.WHITE);
-        confirmBtn.setFocusPainted(false);
+        confirmBtn = com.fitcore.ui.theme.Theme.createSuccessButton("⏱  Record Check-in");
         confirmBtn.addActionListener(e -> onCheckIn());
 
         buttons.add(cancelBtn);

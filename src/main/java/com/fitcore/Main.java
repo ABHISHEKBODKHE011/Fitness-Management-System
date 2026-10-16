@@ -24,16 +24,18 @@ public class Main {
 
         logger.info("Starting FitCore Pro Desktop Application...");
 
-        // Setup FlatLaf modern UI theme
+        // Setup FlatLaf modern UI theme (Trendy macOS-styled Dark Theme)
         try {
-            UIManager.setLookAndFeel(new FlatLightLaf());
+            com.formdev.flatlaf.themes.FlatMacDarkLaf.setup();
             configureCustomUiProperties();
-            logger.info("FlatLaf modern Look & Feel successfully initialized.");
+            logger.info("FlatMacDarkLaf modern Look & Feel successfully initialized.");
         } catch (Exception e) {
-            logger.warn("Could not load FlatLaf, falling back to system Look & Feel: {}", e.getMessage());
+            logger.warn("Could not load FlatMacDarkLaf, trying FlatDarkLaf: {}", e.getMessage());
             try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception ignored) {
+                com.formdev.flatlaf.FlatDarkLaf.setup();
+                configureCustomUiProperties();
+            } catch (Exception ex) {
+                logger.warn("Falling back to system Look & Feel: {}", ex.getMessage());
             }
         }
 
@@ -72,14 +74,23 @@ public class Main {
     }
 
     private static void configureCustomUiProperties() {
-        UIManager.put("Button.arc", 8);
-        UIManager.put("Component.arc", 8);
-        UIManager.put("ProgressBar.arc", 8);
-        UIManager.put("TextComponent.arc", 6);
+        UIManager.put("Button.arc", 12);
+        UIManager.put("Component.arc", 12);
+        UIManager.put("ProgressBar.arc", 12);
+        UIManager.put("TextComponent.arc", 10);
         UIManager.put("ScrollBar.showButtons", false);
         UIManager.put("ScrollBar.width", 10);
-        UIManager.put("TabbedPane.selectedBackground", Color.WHITE);
-        UIManager.put("TabbedPane.showTabSeparators", true);
-        UIManager.put("TableHeader.separatorColor", new Color(226, 232, 240));
+        UIManager.put("ScrollBar.thumbArc", 10);
+        UIManager.put("ScrollBar.thumbInsets", new Insets(2, 2, 2, 2));
+        UIManager.put("Table.rowHeight", 42);
+        UIManager.put("TableHeader.height", 42);
+        UIManager.put("TableHeader.separatorColor", new Color(33, 45, 68));
+        UIManager.put("TabbedPane.showTabSeparators", false);
+        UIManager.put("TabbedPane.tabHeight", 38);
+        UIManager.put("TabbedPane.selectedBackground", new Color(30, 41, 59));
+        UIManager.put("Component.focusWidth", 1);
+        UIManager.put("Component.innerFocusWidth", 0);
+        UIManager.put("TitlePane.unifiedBackground", true);
+        UIManager.put("TitlePane.centerTitle", true);
     }
 }

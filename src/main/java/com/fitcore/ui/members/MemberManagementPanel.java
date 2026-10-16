@@ -10,6 +10,7 @@ import com.fitcore.service.TrainerService;
 import com.fitcore.ui.components.ModernTable;
 import com.fitcore.ui.components.StatusBadge;
 import com.fitcore.ui.memberships.MembershipAssignmentDialog;
+import com.fitcore.ui.theme.Theme;
 import com.fitcore.util.DateTimeUtil;
 import com.fitcore.util.ExportUtil;
 
@@ -54,8 +55,8 @@ public class MemberManagementPanel extends JPanel {
         this.paymentService = paymentService;
 
         setLayout(new BorderLayout());
-        setBackground(new Color(248, 250, 252));
-        setBorder(BorderFactory.createEmptyBorder(20, 24, 24, 24));
+        setBackground(Theme.BG_APP);
+        setBorder(BorderFactory.createEmptyBorder(24, 28, 28, 28));
 
         add(createTopControlPanel(), BorderLayout.NORTH);
         add(createTablePanel(), BorderLayout.CENTER);
@@ -64,7 +65,7 @@ public class MemberManagementPanel extends JPanel {
     }
 
     private JPanel createTopControlPanel() {
-        JPanel panel = new JPanel(new BorderLayout(0, 12));
+        JPanel panel = new JPanel(new BorderLayout(0, 14));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
 
@@ -72,31 +73,44 @@ public class MemberManagementPanel extends JPanel {
         JPanel titleRow = new JPanel(new BorderLayout());
         titleRow.setOpaque(false);
 
-        JLabel titleLbl = new JLabel("Member Management Directory");
-        titleLbl.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        titleLbl.setForeground(new Color(15, 23, 42));
+        JLabel titleLbl = new JLabel("Athlete Directory & Management");
+        titleLbl.setFont(Theme.bold(22));
+        titleLbl.setForeground(Theme.TEXT_PRIMARY);
         titleRow.add(titleLbl, BorderLayout.WEST);
 
         // Search + Status Filter
         JPanel searchBox = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         searchBox.setOpaque(false);
 
-        searchField = new JTextField(18);
-        searchField.putClientProperty("JTextField.placeholderText", "Search by code, name, phone, email...");
-        searchField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        searchField = new JTextField(20);
+        searchField.putClientProperty("JTextField.placeholderText", "🔍  Search code, name, phone, email...");
+        searchField.putClientProperty("JTextField.showClearButton", true);
+        searchField.setFont(Theme.font(12));
+        searchField.setBackground(Theme.BG_INPUT);
+        searchField.setForeground(Theme.TEXT_PRIMARY);
+        searchField.setCaretColor(Theme.ACCENT_CYAN);
+        searchField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Theme.BORDER_SUBTLE, 1, true),
+                BorderFactory.createEmptyBorder(6, 10, 6, 10)
+        ));
         searchField.addActionListener(e -> refreshData());
 
-        JButton searchBtn = new JButton("Search");
-        searchBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        searchBtn.addActionListener(e -> refreshData());
-
         statusFilterCombo = new JComboBox<>(new String[]{"ALL", "ACTIVE", "INACTIVE"});
-        statusFilterCombo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        statusFilterCombo.setFont(Theme.font(12));
+        statusFilterCombo.setBackground(Theme.BG_INPUT);
+        statusFilterCombo.setForeground(Theme.TEXT_PRIMARY);
         statusFilterCombo.addActionListener(e -> refreshData());
 
-        searchBox.add(new JLabel("Status:"));
+        JLabel filterLabel = new JLabel("Status:");
+        filterLabel.setFont(Theme.bold(11));
+        filterLabel.setForeground(Theme.TEXT_SECONDARY);
+
+        searchBox.add(filterLabel);
         searchBox.add(statusFilterCombo);
         searchBox.add(searchField);
+
+        JButton searchBtn = Theme.createGhostButton("Search");
+        searchBtn.addActionListener(e -> refreshData());
         searchBox.add(searchBtn);
         titleRow.add(searchBox, BorderLayout.EAST);
 
@@ -104,23 +118,23 @@ public class MemberManagementPanel extends JPanel {
         JPanel actionRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         actionRow.setOpaque(false);
 
-        JButton addBtn = createActionButton("+ Register Member", new Color(37, 99, 235), Color.WHITE);
+        JButton addBtn = Theme.createPrimaryButton("➕  Register Athlete");
         addBtn.addActionListener(e -> onAddMember());
 
-        JButton editBtn = createActionButton("✏ Edit Details", new Color(241, 245, 249), new Color(30, 41, 59));
+        JButton editBtn = Theme.createGhostButton("✏  Edit Details");
         editBtn.addActionListener(e -> onEditMember());
 
-        JButton viewProfileBtn = createActionButton("🔍 View 360° Profile", new Color(15, 23, 42), Color.WHITE);
+        JButton viewProfileBtn = Theme.createGhostButton("🔍  360° Profile");
         viewProfileBtn.addActionListener(e -> onViewProfile());
 
-        JButton assignPlanBtn = createActionButton("📋 Assign Plan", new Color(16, 185, 129), Color.WHITE);
+        JButton assignPlanBtn = Theme.createSuccessButton("📋  Assign Plan");
         assignPlanBtn.addActionListener(e -> onAssignPlan());
 
-        JButton toggleStatusBtn = createActionButton("🔄 Toggle Active/Inactive", new Color(241, 245, 249), new Color(30, 41, 59));
+        JButton toggleStatusBtn = Theme.createGhostButton("🔄  Toggle Status");
         toggleStatusBtn.addActionListener(e -> onToggleStatus());
 
-        JButton exportBtn = createActionButton("📥 Export CSV", new Color(241, 245, 249), new Color(30, 41, 59));
-        exportBtn.addActionListener(e -> ExportUtil.exportTableToCsv(this, table, "FitCore_Members_Directory"));
+        JButton exportBtn = Theme.createGhostButton("📥  Export CSV");
+        exportBtn.addActionListener(e -> ExportUtil.exportTableToCsv(this, table, "FitCore_Athletes_Directory"));
 
         actionRow.add(addBtn);
         actionRow.add(editBtn);
@@ -136,7 +150,7 @@ public class MemberManagementPanel extends JPanel {
 
     private JPanel createTablePanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(Theme.BG_CARD);
 
         tableModel = new DefaultTableModel(
                 new String[]{"Member Code", "Full Name", "Phone", "Email", "Gender", "Trainer", "Active Plan", "Valid Until", "Status"}, 0
@@ -154,7 +168,7 @@ public class MemberManagementPanel extends JPanel {
                 StatusBadge badge = new StatusBadge(value != null ? value.toString() : "ACTIVE");
                 JPanel p = new JPanel(new GridBagLayout());
                 p.setOpaque(true);
-                p.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? Color.WHITE : new Color(248, 250, 252)));
+                p.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? table.getBackground() : new Color(14, 20, 33)));
                 p.add(badge);
                 return p;
             }

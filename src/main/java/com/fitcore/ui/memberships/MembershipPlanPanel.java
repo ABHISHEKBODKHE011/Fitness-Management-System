@@ -37,8 +37,8 @@ public class MembershipPlanPanel extends JPanel {
         this.memberService = memberService;
 
         setLayout(new BorderLayout());
-        setBackground(new Color(248, 250, 252));
-        setBorder(BorderFactory.createEmptyBorder(20, 24, 24, 24));
+        setBackground(com.fitcore.ui.theme.Theme.BG_APP);
+        setBorder(BorderFactory.createEmptyBorder(24, 28, 28, 28));
 
         add(createTopControlPanel(), BorderLayout.NORTH);
         add(createTablePanel(), BorderLayout.CENTER);
@@ -47,34 +47,34 @@ public class MembershipPlanPanel extends JPanel {
     }
 
     private JPanel createTopControlPanel() {
-        JPanel panel = new JPanel(new BorderLayout(0, 12));
+        JPanel panel = new JPanel(new BorderLayout(0, 14));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
 
         JPanel titleRow = new JPanel(new BorderLayout());
         titleRow.setOpaque(false);
 
-        JLabel titleLbl = new JLabel("Membership Plans Catalog");
-        titleLbl.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        titleLbl.setForeground(new Color(15, 23, 42));
+        JLabel titleLbl = new JLabel("Membership Plans & Subscription Tiers");
+        titleLbl.setFont(com.fitcore.ui.theme.Theme.bold(22));
+        titleLbl.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
         titleRow.add(titleLbl, BorderLayout.WEST);
 
         JPanel actionRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         actionRow.setOpaque(false);
 
-        JButton addBtn = createActionButton("+ Create Plan", new Color(37, 99, 235), Color.WHITE);
+        JButton addBtn = com.fitcore.ui.theme.Theme.createPrimaryButton("➕  Create Tier");
         addBtn.addActionListener(e -> onAddPlan());
 
-        JButton editBtn = createActionButton("✏ Edit Plan", new Color(241, 245, 249), new Color(30, 41, 59));
+        JButton editBtn = com.fitcore.ui.theme.Theme.createGhostButton("✏  Edit Tier");
         editBtn.addActionListener(e -> onEditPlan());
 
-        JButton assignBtn = createActionButton("📋 Assign to Member", new Color(16, 185, 129), Color.WHITE);
+        JButton assignBtn = com.fitcore.ui.theme.Theme.createSuccessButton("📋  Assign to Athlete");
         assignBtn.addActionListener(e -> onAssignToMember());
 
-        JButton deactivateBtn = createActionButton("🚫 Deactivate Plan", new Color(241, 245, 249), new Color(239, 68, 68));
+        JButton deactivateBtn = com.fitcore.ui.theme.Theme.createGhostButton("🚫  Toggle Status");
         deactivateBtn.addActionListener(e -> onDeactivatePlan());
 
-        JButton exportBtn = createActionButton("📥 Export CSV", new Color(241, 245, 249), new Color(30, 41, 59));
+        JButton exportBtn = com.fitcore.ui.theme.Theme.createGhostButton("📥  Export CSV");
         exportBtn.addActionListener(e -> ExportUtil.exportTableToCsv(this, table, "FitCore_Plans_Catalog"));
 
         actionRow.add(addBtn);
@@ -90,7 +90,7 @@ public class MembershipPlanPanel extends JPanel {
 
     private JPanel createTablePanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(com.fitcore.ui.theme.Theme.BG_CARD);
 
         tableModel = new DefaultTableModel(
                 new String[]{"Plan Code", "Plan Name", "Duration", "Standard Fee", "Description", "Status"}, 0
@@ -107,7 +107,7 @@ public class MembershipPlanPanel extends JPanel {
                 StatusBadge badge = new StatusBadge(value != null ? value.toString() : "ACTIVE");
                 JPanel p = new JPanel(new GridBagLayout());
                 p.setOpaque(true);
-                p.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? Color.WHITE : new Color(248, 250, 252)));
+                p.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? table.getBackground() : new Color(14, 20, 33)));
                 p.add(badge);
                 return p;
             }

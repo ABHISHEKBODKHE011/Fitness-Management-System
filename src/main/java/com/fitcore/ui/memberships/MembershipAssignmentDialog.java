@@ -151,18 +151,13 @@ public class MembershipAssignmentDialog extends JDialog {
         addRow(content, gbc, row++, "Notes:", new JScrollPane(notesArea));
 
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 14));
-        buttons.setBackground(new Color(248, 250, 252));
-        buttons.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(226, 232, 240)));
+        buttons.setBackground(com.fitcore.ui.theme.Theme.BG_CARD);
+        buttons.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, com.fitcore.ui.theme.Theme.BORDER_SUBTLE));
 
-        JButton cancelBtn = new JButton("Cancel");
-        cancelBtn.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        JButton cancelBtn = com.fitcore.ui.theme.Theme.createGhostButton("Cancel");
         cancelBtn.addActionListener(e -> dispose());
 
-        JButton assignBtn = new JButton("Assign Membership");
-        assignBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        assignBtn.setBackground(new Color(37, 99, 235));
-        assignBtn.setForeground(Color.WHITE);
-        assignBtn.setFocusPainted(false);
+        JButton assignBtn = com.fitcore.ui.theme.Theme.createSuccessButton("📋  Assign Membership");
         assignBtn.addActionListener(e -> onAssign());
 
         buttons.add(cancelBtn);

@@ -35,7 +35,7 @@ public class MemberDetailDialog extends JDialog {
         this.attendanceService = attendanceService;
         this.paymentService = paymentService;
 
-        setSize(780, 560);
+        setSize(800, 580);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 
@@ -43,9 +43,9 @@ public class MemberDetailDialog extends JDialog {
         add(createTabs(), BorderLayout.CENTER);
 
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 14, 10));
-        footer.setBackground(new Color(248, 250, 252));
-        JButton closeBtn = new JButton("Close Profile");
-        closeBtn.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        footer.setBackground(com.fitcore.ui.theme.Theme.BG_CARD);
+        footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, com.fitcore.ui.theme.Theme.BORDER_SUBTLE));
+        JButton closeBtn = com.fitcore.ui.theme.Theme.createGhostButton("Close Profile");
         closeBtn.addActionListener(e -> dispose());
         footer.add(closeBtn);
         add(footer, BorderLayout.SOUTH);
@@ -53,21 +53,22 @@ public class MemberDetailDialog extends JDialog {
 
     private JPanel createProfileHeader() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(com.fitcore.ui.theme.Theme.BG_HEADER);
         panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(226, 232, 240)),
-                BorderFactory.createEmptyBorder(16, 20, 16, 20)
+                BorderFactory.createMatteBorder(0, 0, 1, 0, com.fitcore.ui.theme.Theme.BORDER_SUBTLE),
+                BorderFactory.createEmptyBorder(18, 24, 18, 24)
         ));
 
         JPanel left = new JPanel(new GridLayout(2, 2, 16, 6));
         left.setOpaque(false);
 
         JLabel nameLbl = new JLabel(member.getFullName());
-        nameLbl.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        nameLbl.setForeground(new Color(15, 23, 42));
+        nameLbl.setFont(com.fitcore.ui.theme.Theme.bold(20));
+        nameLbl.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
 
         JLabel codeLbl = new JLabel("ID: " + member.getMemberCode() + " • Joined: " + DateTimeUtil.formatDate(member.getJoiningDate()));
-        codeLbl.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        codeLbl.setFont(com.fitcore.ui.theme.Theme.font(12));
+        codeLbl.setForeground(com.fitcore.ui.theme.Theme.TEXT_SECONDARY);
         codeLbl.setForeground(new Color(100, 116, 139));
 
         JLabel contactLbl = new JLabel("📞 " + member.getPhone() + "  |  ✉ " + member.getEmail());

@@ -49,8 +49,8 @@ public class PaymentPanel extends JPanel {
         this.membershipService = membershipService;
 
         setLayout(new BorderLayout());
-        setBackground(new Color(248, 250, 252));
-        setBorder(BorderFactory.createEmptyBorder(20, 24, 24, 24));
+        setBackground(com.fitcore.ui.theme.Theme.BG_APP);
+        setBorder(BorderFactory.createEmptyBorder(24, 28, 28, 28));
 
         add(createTopControlPanel(), BorderLayout.NORTH);
         add(createTablePanel(), BorderLayout.CENTER);
@@ -59,7 +59,7 @@ public class PaymentPanel extends JPanel {
     }
 
     private JPanel createTopControlPanel() {
-        JPanel panel = new JPanel(new BorderLayout(0, 12));
+        JPanel panel = new JPanel(new BorderLayout(0, 14));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
 
@@ -67,8 +67,8 @@ public class PaymentPanel extends JPanel {
         titleRow.setOpaque(false);
 
         JLabel titleLbl = new JLabel("Billing & Financial Ledger");
-        titleLbl.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        titleLbl.setForeground(new Color(15, 23, 42));
+        titleLbl.setFont(com.fitcore.ui.theme.Theme.bold(22));
+        titleLbl.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
         titleRow.add(titleLbl, BorderLayout.WEST);
 
         // Filter Bar
@@ -76,26 +76,39 @@ public class PaymentPanel extends JPanel {
         filterRow.setOpaque(false);
 
         fromDateField = new JTextField(DateTimeUtil.formatDateIso(LocalDate.now().minusMonths(3)), 8);
+        fromDateField.setFont(com.fitcore.ui.theme.Theme.font(12));
+        fromDateField.setBackground(com.fitcore.ui.theme.Theme.BG_INPUT);
+        fromDateField.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
+
         toDateField = new JTextField(DateTimeUtil.formatDateIso(LocalDate.now()), 8);
+        toDateField.setFont(com.fitcore.ui.theme.Theme.font(12));
+        toDateField.setBackground(com.fitcore.ui.theme.Theme.BG_INPUT);
+        toDateField.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
 
         methodFilterCombo = new JComboBox<>(new String[]{"ALL", "CASH", "UPI", "CARD", "BANK_TRANSFER"});
+        methodFilterCombo.setFont(com.fitcore.ui.theme.Theme.font(12));
+        methodFilterCombo.setBackground(com.fitcore.ui.theme.Theme.BG_INPUT);
+        methodFilterCombo.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
+
         statusFilterCombo = new JComboBox<>(new String[]{"ALL", "SUCCESS", "PENDING", "FAILED", "REFUNDED"});
+        statusFilterCombo.setFont(com.fitcore.ui.theme.Theme.font(12));
+        statusFilterCombo.setBackground(com.fitcore.ui.theme.Theme.BG_INPUT);
+        statusFilterCombo.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
 
         searchField = new JTextField(12);
-        searchField.putClientProperty("JTextField.placeholderText", "Search receipt/member/txn...");
+        searchField.putClientProperty("JTextField.placeholderText", "🔍 Search...");
+        searchField.setFont(com.fitcore.ui.theme.Theme.font(12));
+        searchField.setBackground(com.fitcore.ui.theme.Theme.BG_INPUT);
+        searchField.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
+        searchField.setCaretColor(com.fitcore.ui.theme.Theme.ACCENT_CYAN);
         searchField.addActionListener(e -> refreshData());
 
-        JButton filterBtn = new JButton("Filter");
-        filterBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        JButton filterBtn = com.fitcore.ui.theme.Theme.createGhostButton("Filter");
         filterBtn.addActionListener(e -> refreshData());
 
-        filterRow.add(new JLabel("From:"));
         filterRow.add(fromDateField);
-        filterRow.add(new JLabel("To:"));
         filterRow.add(toDateField);
-        filterRow.add(new JLabel("Method:"));
         filterRow.add(methodFilterCombo);
-        filterRow.add(new JLabel("Status:"));
         filterRow.add(statusFilterCombo);
         filterRow.add(searchField);
         filterRow.add(filterBtn);
@@ -109,13 +122,13 @@ public class PaymentPanel extends JPanel {
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         buttons.setOpaque(false);
 
-        JButton recordBtn = createActionButton("💳 Record Payment", new Color(37, 99, 235), Color.WHITE);
+        JButton recordBtn = com.fitcore.ui.theme.Theme.createPrimaryButton("💳  Record Payment");
         recordBtn.addActionListener(e -> onRecordPayment());
 
-        JButton receiptBtn = createActionButton("📄 View / Print Receipt", new Color(15, 23, 42), Color.WHITE);
+        JButton receiptBtn = com.fitcore.ui.theme.Theme.createGhostButton("📄  Print Receipt");
         receiptBtn.addActionListener(e -> onViewReceipt());
 
-        JButton exportBtn = createActionButton("📥 Export Ledger CSV", new Color(241, 245, 249), new Color(30, 41, 59));
+        JButton exportBtn = com.fitcore.ui.theme.Theme.createGhostButton("📥  Export Ledger CSV");
         exportBtn.addActionListener(e -> ExportUtil.exportTableToCsv(this, table, "FitCore_Billing_Ledger"));
 
         buttons.add(recordBtn);
@@ -127,12 +140,12 @@ public class PaymentPanel extends JPanel {
         summary.setOpaque(false);
 
         totalRevenueLabel = new JLabel("Revenue: $0.00");
-        totalRevenueLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        totalRevenueLabel.setForeground(new Color(22, 101, 52)); // emerald-800
+        totalRevenueLabel.setFont(com.fitcore.ui.theme.Theme.bold(14));
+        totalRevenueLabel.setForeground(com.fitcore.ui.theme.Theme.ACCENT_EMERALD);
 
         txCountLabel = new JLabel("Transactions: 0");
-        txCountLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        txCountLabel.setForeground(new Color(71, 85, 105));
+        txCountLabel.setFont(com.fitcore.ui.theme.Theme.font(13));
+        txCountLabel.setForeground(com.fitcore.ui.theme.Theme.TEXT_SECONDARY);
 
         summary.add(txCountLabel);
         summary.add(totalRevenueLabel);
@@ -147,7 +160,7 @@ public class PaymentPanel extends JPanel {
 
     private JPanel createTablePanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(com.fitcore.ui.theme.Theme.BG_CARD);
 
         tableModel = new DefaultTableModel(
                 new String[]{"Receipt Code", "Date & Time", "Member Code", "Member Name", "Plan", "Amount ($)", "Method", "Auth Reference", "Status"}, 0
@@ -164,7 +177,7 @@ public class PaymentPanel extends JPanel {
                 StatusBadge badge = new StatusBadge(value != null ? value.toString() : "SUCCESS");
                 JPanel p = new JPanel(new GridBagLayout());
                 p.setOpaque(true);
-                p.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? Color.WHITE : new Color(248, 250, 252)));
+                p.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? table.getBackground() : new Color(14, 20, 33)));
                 p.add(badge);
                 return p;
             }

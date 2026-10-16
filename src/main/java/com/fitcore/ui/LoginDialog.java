@@ -4,6 +4,8 @@ import com.fitcore.config.AppConfig;
 import com.fitcore.model.User;
 import com.fitcore.service.AuthService;
 
+import com.fitcore.ui.theme.Theme;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -21,109 +23,165 @@ public class LoginDialog extends JDialog {
     private JButton loginButton;
 
     public LoginDialog(Frame parent, AuthService authService) {
-        super(parent, "FitCore Pro - System Authentication", true);
+        super(parent, "FitCore Pro • System Authentication", true);
         this.authService = authService;
 
-        setSize(720, 440);
+        setSize(760, 470);
         setResizable(false);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 
         JPanel container = new JPanel(new GridLayout(1, 2));
+        container.setBackground(Theme.BG_APP);
 
-        // Left Branding Panel
-        JPanel leftBanner = new JPanel();
-        leftBanner.setBackground(new Color(15, 23, 42)); // deep navy
+        // Left Branding Panel with subtle gradient
+        JPanel leftBanner = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                GradientPaint gp = new GradientPaint(
+                        0, 0, new Color(15, 23, 42),
+                        getWidth(), getHeight(), new Color(11, 15, 25)
+                );
+                g2.setPaint(gp);
+                g2.fillRect(0, 0, getWidth(), getHeight());
+                // Subtle glowing line
+                g2.setColor(new Color(99, 102, 241, 60));
+                g2.drawLine(getWidth() - 1, 0, getWidth() - 1, getHeight());
+                g2.dispose();
+            }
+        };
         leftBanner.setLayout(new BoxLayout(leftBanner, BoxLayout.Y_AXIS));
-        leftBanner.setBorder(BorderFactory.createEmptyBorder(40, 32, 40, 32));
+        leftBanner.setBorder(BorderFactory.createEmptyBorder(44, 34, 44, 34));
+
+        JLabel badgePill = new JLabel("  ENTERPRISE FITNESS v1.0  ");
+        badgePill.setFont(Theme.bold(10));
+        badgePill.setForeground(Theme.ACCENT_CYAN);
+        badgePill.setOpaque(true);
+        badgePill.setBackground(new Color(6, 182, 212, 25));
+        badgePill.setBorder(BorderFactory.createLineBorder(new Color(6, 182, 212, 60), 1, true));
 
         JLabel logoLbl = new JLabel("⚡ FITCORE PRO");
-        logoLbl.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        logoLbl.setForeground(Color.WHITE);
+        logoLbl.setFont(Theme.bold(26));
+        logoLbl.setForeground(Theme.TEXT_PRIMARY);
 
-        JLabel tagLbl = new JLabel("Advanced Fitness Management System");
-        tagLbl.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        tagLbl.setForeground(new Color(96, 165, 250)); // blue-400
+        JLabel tagLbl = new JLabel("Next-Gen Gym & Athletic Operations");
+        tagLbl.setFont(Theme.font(12));
+        tagLbl.setForeground(Theme.ACCENT_CYAN);
 
-        JLabel descLbl = new JLabel("<html><br><br>• Secure Role-Based Access Control<br>• Real-time MySQL 8.x Analytics<br>• Member 360° Profiles & History<br>• Attendance & Check-in Enforcement<br>• Automated Financial Billing Ledger</html>");
-        descLbl.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        descLbl.setForeground(new Color(203, 213, 225));
+        JLabel descLbl = new JLabel("<html><br>" +
+                "<div style='line-height:1.7; color:#94A3B8; font-size:11px;'>" +
+                "✓ &nbsp;<b style='color:#F8FAFC;'>Role-Based Access Control</b> (Admin, Reception, Trainer)<br>" +
+                "✓ &nbsp;<b style='color:#F8FAFC;'>Live MySQL 8.x</b> Analytics & Trend Engine<br>" +
+                "✓ &nbsp;<b style='color:#F8FAFC;'>Member 360° Profiles</b> & Active Subscriptions<br>" +
+                "✓ &nbsp;<b style='color:#F8FAFC;'>Strict Attendance Guard</b> & QR/Key Check-in<br>" +
+                "✓ &nbsp;<b style='color:#F8FAFC;'>Automated Billing Ledger</b> & Thermal Receipts" +
+                "</div></html>");
 
+        JLabel statusDot = new JLabel("● MySQL 8.x Database Online");
+        statusDot.setFont(Theme.bold(11));
+        statusDot.setForeground(Theme.ACCENT_EMERALD);
+        statusDot.setBorder(BorderFactory.createEmptyBorder(18, 0, 0, 0));
+
+        leftBanner.add(badgePill);
+        leftBanner.add(Box.createVerticalStrut(12));
         leftBanner.add(logoLbl);
-        leftBanner.add(Box.createVerticalStrut(6));
+        leftBanner.add(Box.createVerticalStrut(4));
         leftBanner.add(tagLbl);
         leftBanner.add(descLbl);
+        leftBanner.add(Box.createVerticalGlue());
+        leftBanner.add(statusDot);
 
         // Right Form Panel
         JPanel rightForm = new JPanel();
-        rightForm.setBackground(Color.WHITE);
+        rightForm.setBackground(Theme.BG_CARD);
         rightForm.setLayout(new BoxLayout(rightForm, BoxLayout.Y_AXIS));
-        rightForm.setBorder(BorderFactory.createEmptyBorder(36, 36, 36, 36));
+        rightForm.setBorder(BorderFactory.createEmptyBorder(40, 36, 40, 36));
 
-        JLabel loginHeader = new JLabel("Welcome Back");
-        loginHeader.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        loginHeader.setForeground(new Color(15, 23, 42));
+        JLabel loginHeader = new JLabel("Sign In");
+        loginHeader.setFont(Theme.bold(22));
+        loginHeader.setForeground(Theme.TEXT_PRIMARY);
 
-        JLabel loginSub = new JLabel("Please enter your staff credentials to continue");
-        loginSub.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        loginSub.setForeground(new Color(100, 116, 139));
+        JLabel loginSub = new JLabel("Enter your staff credentials to access console");
+        loginSub.setFont(Theme.font(12));
+        loginSub.setForeground(Theme.TEXT_SECONDARY);
 
         errorLabel = new JLabel(" ");
-        errorLabel.setFont(new Font("Segoe UI", Font.BOLD, 11));
-        errorLabel.setForeground(new Color(239, 68, 68)); // red-500
+        errorLabel.setFont(Theme.bold(11));
+        errorLabel.setForeground(Theme.ACCENT_ROSE);
 
         usernameField = new JTextField();
-        usernameField.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        usernameField.setFont(Theme.font(13));
+        usernameField.setBackground(Theme.BG_INPUT);
+        usernameField.setForeground(Theme.TEXT_PRIMARY);
+        usernameField.setCaretColor(Theme.ACCENT_CYAN);
         usernameField.putClientProperty("JTextField.placeholderText", "Username (e.g. admin)");
-        usernameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
+        usernameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        usernameField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Theme.BORDER_SUBTLE, 1, true),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)
+        ));
 
         passwordField = new JPasswordField();
-        passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        passwordField.setFont(Theme.font(13));
+        passwordField.setBackground(Theme.BG_INPUT);
+        passwordField.setForeground(Theme.TEXT_PRIMARY);
+        passwordField.setCaretColor(Theme.ACCENT_CYAN);
         passwordField.putClientProperty("JTextField.placeholderText", "Password");
-        passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
+        passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        passwordField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Theme.BORDER_SUBTLE, 1, true),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)
+        ));
 
-        loginButton = new JButton("Sign In to System");
-        loginButton.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        loginButton.setBackground(new Color(37, 99, 235));
-        loginButton.setForeground(Color.WHITE);
-        loginButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        loginButton.setFocusPainted(false);
-        loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        loginButton = Theme.createPrimaryButton("🚀  Authenticate & Enter");
+        loginButton.setFont(Theme.bold(13));
+        loginButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 42));
         loginButton.addActionListener(e -> attemptLogin());
 
         // Enter key submission
         usernameField.addActionListener(e -> attemptLogin());
         passwordField.addActionListener(e -> attemptLogin());
 
-        // Demo Quick Credentials helper pills for college presentation
-        JPanel demoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
+        // Demo Quick Credentials helper pills
+        JPanel demoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
         demoPanel.setOpaque(false);
-        demoPanel.setBorder(BorderFactory.createEmptyBorder(8, 0, 0, 0));
+        demoPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
-        JLabel demoLbl = new JLabel("Demo Roles: ");
-        demoLbl.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        demoLbl.setForeground(new Color(100, 116, 139));
+        JLabel demoLbl = new JLabel("Quick Fill:");
+        demoLbl.setFont(Theme.font(11));
+        demoLbl.setForeground(Theme.TEXT_MUTED);
         demoPanel.add(demoLbl);
 
-        JButton adminPill = createPresetPill("Admin", "admin", "Admin@123");
-        JButton recPill = createPresetPill("Reception", "reception", "Reception@123");
-        JButton trainerPill = createPresetPill("Trainer", "trainer_mike", "Trainer@123");
+        JButton adminPill = createPresetPill("⚡ Admin", "admin", "Admin@123");
+        JButton recPill = createPresetPill("📋 Reception", "receptionist", "Staff@123");
+        JButton trainerPill = createPresetPill("💪 Trainer", "trainer_alex", "Trainer@123");
 
         demoPanel.add(adminPill);
         demoPanel.add(recPill);
         demoPanel.add(trainerPill);
 
+        JLabel userLabelPrompt = new JLabel("Staff Username");
+        userLabelPrompt.setFont(Theme.bold(11));
+        userLabelPrompt.setForeground(Theme.TEXT_SECONDARY);
+
+        JLabel passLabelPrompt = new JLabel("Secure Password");
+        passLabelPrompt.setFont(Theme.bold(11));
+        passLabelPrompt.setForeground(Theme.TEXT_SECONDARY);
+
         rightForm.add(loginHeader);
         rightForm.add(Box.createVerticalStrut(4));
         rightForm.add(loginSub);
-        rightForm.add(Box.createVerticalStrut(10));
-        rightForm.add(errorLabel);
         rightForm.add(Box.createVerticalStrut(8));
-        rightForm.add(new JLabel("Username:"));
+        rightForm.add(errorLabel);
+        rightForm.add(Box.createVerticalStrut(6));
+        rightForm.add(userLabelPrompt);
         rightForm.add(Box.createVerticalStrut(4));
         rightForm.add(usernameField);
         rightForm.add(Box.createVerticalStrut(12));
-        rightForm.add(new JLabel("Password:"));
+        rightForm.add(passLabelPrompt);
         rightForm.add(Box.createVerticalStrut(4));
         rightForm.add(passwordField);
         rightForm.add(Box.createVerticalStrut(18));
@@ -135,19 +193,19 @@ public class LoginDialog extends JDialog {
         container.add(rightForm);
         add(container, BorderLayout.CENTER);
 
-        // Pre-fill with admin by default for easy local start
+        // Pre-fill with admin by default for convenience
         usernameField.setText("admin");
         passwordField.setText("Admin@123");
     }
 
     private JButton createPresetPill(String title, String user, String pass) {
         JButton b = new JButton(title);
-        b.setFont(new Font("Segoe UI", Font.BOLD, 10));
-        b.setBackground(new Color(241, 245, 249));
-        b.setForeground(new Color(51, 65, 85));
+        b.setFont(Theme.bold(10));
+        b.setBackground(Theme.BG_INPUT);
+        b.setForeground(Theme.TEXT_SECONDARY);
         b.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(203, 213, 225), 1),
-                BorderFactory.createEmptyBorder(2, 6, 2, 6)
+                BorderFactory.createLineBorder(Theme.BORDER_SUBTLE, 1, true),
+                BorderFactory.createEmptyBorder(4, 8, 4, 8)
         ));
         b.setFocusPainted(false);
         b.setCursor(new Cursor(Cursor.HAND_CURSOR));

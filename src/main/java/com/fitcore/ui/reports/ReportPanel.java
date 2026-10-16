@@ -11,6 +11,7 @@ import com.fitcore.service.MembershipService;
 import com.fitcore.ui.components.ModernTable;
 import com.fitcore.ui.components.StatusBadge;
 import com.fitcore.ui.memberships.MembershipRenewalDialog;
+import com.fitcore.ui.theme.Theme;
 import com.fitcore.util.CurrencyUtil;
 import com.fitcore.util.DateTimeUtil;
 import com.fitcore.util.ExportUtil;
@@ -42,17 +43,17 @@ public class ReportPanel extends JPanel {
         this.attendanceService = attendanceService;
 
         setLayout(new BorderLayout());
-        setBackground(new Color(248, 250, 252));
-        setBorder(BorderFactory.createEmptyBorder(20, 24, 24, 24));
+        setBackground(Theme.BG_APP);
+        setBorder(BorderFactory.createEmptyBorder(24, 28, 28, 28));
 
-        JLabel title = new JLabel("Reports & Analytics Center");
-        title.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        title.setForeground(new Color(15, 23, 42));
+        JLabel title = new JLabel("Executive Reports & Analytics Center");
+        title.setFont(Theme.bold(22));
+        title.setForeground(Theme.TEXT_PRIMARY);
         title.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
         add(title, BorderLayout.NORTH);
 
         JTabbedPane tabs = new JTabbedPane();
-        tabs.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        tabs.setFont(Theme.bold(12));
 
         tabs.addTab("Expiring Memberships", createExpiringSoonTab());
         tabs.addTab("Active vs Expired Subscriptions", createActiveExpiredTab());
@@ -65,7 +66,7 @@ public class ReportPanel extends JPanel {
 
     private JPanel createExpiringSoonTab() {
         JPanel p = new JPanel(new BorderLayout(0, 10));
-        p.setBackground(Color.WHITE);
+        p.setBackground(Theme.BG_CARD);
         p.setBorder(BorderFactory.createEmptyBorder(14, 14, 14, 14));
 
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
@@ -142,7 +143,7 @@ public class ReportPanel extends JPanel {
 
     private JPanel createActiveExpiredTab() {
         JPanel p = new JPanel(new BorderLayout(0, 10));
-        p.setBackground(Color.WHITE);
+        p.setBackground(Theme.BG_CARD);
         p.setBorder(BorderFactory.createEmptyBorder(14, 14, 14, 14));
 
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
@@ -170,7 +171,7 @@ public class ReportPanel extends JPanel {
                 StatusBadge badge = new StatusBadge(val != null ? val.toString() : "ACTIVE");
                 JPanel wrap = new JPanel(new GridBagLayout());
                 wrap.setOpaque(true);
-                wrap.setBackground(isSel ? table.getSelectionBackground() : (r % 2 == 0 ? Color.WHITE : new Color(248, 250, 252)));
+                wrap.setBackground(isSel ? table.getSelectionBackground() : (r % 2 == 0 ? table.getBackground() : new Color(14, 20, 33)));
                 wrap.add(badge);
                 return wrap;
             }
@@ -207,7 +208,7 @@ public class ReportPanel extends JPanel {
 
     private JPanel createTrainerAllocationTab() {
         JPanel p = new JPanel(new BorderLayout(0, 10));
-        p.setBackground(Color.WHITE);
+        p.setBackground(Theme.BG_CARD);
         p.setBorder(BorderFactory.createEmptyBorder(14, 14, 14, 14));
 
         JPanel top = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
@@ -252,7 +253,7 @@ public class ReportPanel extends JPanel {
 
     private JPanel createRevenueBreakdownTab() {
         JPanel p = new JPanel(new BorderLayout(0, 10));
-        p.setBackground(Color.WHITE);
+        p.setBackground(Theme.BG_CARD);
         p.setBorder(BorderFactory.createEmptyBorder(14, 14, 14, 14));
 
         JPanel top = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
@@ -293,7 +294,7 @@ public class ReportPanel extends JPanel {
 
     private JPanel createAttendanceFrequencyTab() {
         JPanel p = new JPanel(new BorderLayout(0, 10));
-        p.setBackground(Color.WHITE);
+        p.setBackground(Theme.BG_CARD);
         p.setBorder(BorderFactory.createEmptyBorder(14, 14, 14, 14));
 
         JPanel top = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));

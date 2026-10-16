@@ -1,23 +1,24 @@
 package com.fitcore.ui.components;
 
+import com.fitcore.ui.theme.Theme;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import java.awt.*;
 
 /**
- * Polished modern JTable with generous row padding, zebra striping, and custom headers.
+ * Polished modern dark JTable with generous row padding, zebra striping, and custom headers.
  */
 public class ModernTable extends JTable {
 
-    private static final Color HEADER_BG = new Color(241, 245, 249); // slate-100
-    private static final Color HEADER_FG = new Color(30, 41, 59);    // slate-800
-    private static final Color ROW_ALT_BG = new Color(248, 250, 252); // slate-50
-    private static final Color ROW_HOVER_BG = new Color(241, 245, 249);
-    private static final Color SELECTION_BG = new Color(224, 231, 255); // indigo-100
-    private static final Color SELECTION_FG = new Color(15, 23, 42);    // navy-900
+    private static final Color HEADER_BG = new Color(24, 33, 53);      // slate-850 (#182135)
+    private static final Color HEADER_FG = new Color(148, 163, 184);    // slate-400
+    private static final Color ROW_BG_EVEN = new Color(18, 25, 41);     // deep card (#121929)
+    private static final Color ROW_BG_ODD = new Color(14, 20, 33);      // deep canvas (#0E1421)
+    private static final Color SELECTION_BG = new Color(99, 102, 241, 70); // Electric Indigo tint
+    private static final Color SELECTION_FG = Color.WHITE;
 
     public ModernTable(TableModel model) {
         super(model);
@@ -30,22 +31,24 @@ public class ModernTable extends JTable {
     }
 
     private void initStyle() {
-        setRowHeight(38);
+        setRowHeight(42);
         setShowGrid(false);
-        setIntercellSpacing(new Dimension(0, 1));
+        setIntercellSpacing(new Dimension(0, 0));
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setSelectionBackground(SELECTION_BG);
         setSelectionForeground(SELECTION_FG);
-        setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        setFont(Theme.font(13));
+        setBackground(ROW_BG_EVEN);
+        setForeground(Theme.TEXT_PRIMARY);
 
         // Configure header
         JTableHeader header = getTableHeader();
         header.setPreferredSize(new Dimension(0, 42));
-        header.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        header.setFont(Theme.bold(11));
         header.setBackground(HEADER_BG);
         header.setForeground(HEADER_FG);
         header.setReorderingAllowed(false);
-        header.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(203, 213, 225)));
+        header.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Theme.BORDER_SUBTLE));
 
         DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer() {
             @Override
@@ -53,22 +56,25 @@ public class ModernTable extends JTable {
                 JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
                 l.setBackground(HEADER_BG);
                 l.setForeground(HEADER_FG);
-                l.setFont(new Font("Segoe UI", Font.BOLD, 12));
-                l.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
+                l.setFont(Theme.bold(11));
+                l.setBorder(BorderFactory.createEmptyBorder(0, 14, 0, 14));
                 return l;
             }
         };
         header.setDefaultRenderer(headerRenderer);
 
-        // Configure default cell padding
+        // Configure default cell padding and zebra striping
         setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
+                setBorder(BorderFactory.createEmptyBorder(0, 14, 0, 14));
                 if (!isSelected) {
-                    c.setBackground(row % 2 == 0 ? Color.WHITE : ROW_ALT_BG);
-                    c.setForeground(new Color(30, 41, 59));
+                    c.setBackground(row % 2 == 0 ? ROW_BG_EVEN : ROW_BG_ODD);
+                    c.setForeground(Theme.TEXT_PRIMARY);
+                } else {
+                    c.setBackground(SELECTION_BG);
+                    c.setForeground(SELECTION_FG);
                 }
                 return c;
             }
@@ -80,8 +86,8 @@ public class ModernTable extends JTable {
      */
     public JScrollPane createScrollPane() {
         JScrollPane scroll = new JScrollPane(this);
-        scroll.setBorder(BorderFactory.createLineBorder(new Color(226, 232, 240), 1));
-        scroll.getViewport().setBackground(Color.WHITE);
+        scroll.setBorder(BorderFactory.createLineBorder(Theme.BORDER_SUBTLE, 1));
+        scroll.getViewport().setBackground(ROW_BG_EVEN);
         return scroll;
     }
 }

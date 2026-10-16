@@ -129,18 +129,13 @@ public class PaymentFormDialog extends JDialog {
         addRow(content, gbc, row++, "", printReceiptCheckbox);
 
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 14));
-        buttons.setBackground(new Color(248, 250, 252));
-        buttons.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(226, 232, 240)));
+        buttons.setBackground(com.fitcore.ui.theme.Theme.BG_CARD);
+        buttons.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, com.fitcore.ui.theme.Theme.BORDER_SUBTLE));
 
-        JButton cancelBtn = new JButton("Cancel");
-        cancelBtn.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        JButton cancelBtn = com.fitcore.ui.theme.Theme.createGhostButton("Cancel");
         cancelBtn.addActionListener(e -> dispose());
 
-        JButton saveBtn = new JButton("Record Payment");
-        saveBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        saveBtn.setBackground(new Color(37, 99, 235));
-        saveBtn.setForeground(Color.WHITE);
-        saveBtn.setFocusPainted(false);
+        JButton saveBtn = com.fitcore.ui.theme.Theme.createPrimaryButton("💳  Record Payment");
         saveBtn.addActionListener(e -> onSave());
 
         buttons.add(cancelBtn);

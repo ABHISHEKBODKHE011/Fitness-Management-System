@@ -30,8 +30,8 @@ public class TrainerManagementPanel extends JPanel {
         this.trainerService = trainerService;
 
         setLayout(new BorderLayout());
-        setBackground(new Color(248, 250, 252));
-        setBorder(BorderFactory.createEmptyBorder(20, 24, 24, 24));
+        setBackground(com.fitcore.ui.theme.Theme.BG_APP);
+        setBorder(BorderFactory.createEmptyBorder(24, 28, 28, 28));
 
         add(createTopControlPanel(), BorderLayout.NORTH);
         add(createTablePanel(), BorderLayout.CENTER);
@@ -40,7 +40,7 @@ public class TrainerManagementPanel extends JPanel {
     }
 
     private JPanel createTopControlPanel() {
-        JPanel panel = new JPanel(new BorderLayout(0, 12));
+        JPanel panel = new JPanel(new BorderLayout(0, 14));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
 
@@ -48,48 +48,61 @@ public class TrainerManagementPanel extends JPanel {
         titleRow.setOpaque(false);
 
         JLabel titleLbl = new JLabel("Certified Fitness Trainers");
-        titleLbl.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        titleLbl.setForeground(new Color(15, 23, 42));
+        titleLbl.setFont(com.fitcore.ui.theme.Theme.bold(22));
+        titleLbl.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
         titleRow.add(titleLbl, BorderLayout.WEST);
 
         JPanel searchBox = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         searchBox.setOpaque(false);
 
         searchField = new JTextField(18);
-        searchField.putClientProperty("JTextField.placeholderText", "Search by code, name, specialization...");
-        searchField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        searchField.putClientProperty("JTextField.placeholderText", "🔍  Search trainer code, name...");
+        searchField.putClientProperty("JTextField.showClearButton", true);
+        searchField.setFont(com.fitcore.ui.theme.Theme.font(12));
+        searchField.setBackground(com.fitcore.ui.theme.Theme.BG_INPUT);
+        searchField.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
+        searchField.setCaretColor(com.fitcore.ui.theme.Theme.ACCENT_CYAN);
+        searchField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(com.fitcore.ui.theme.Theme.BORDER_SUBTLE, 1, true),
+                BorderFactory.createEmptyBorder(6, 10, 6, 10)
+        ));
         searchField.addActionListener(e -> refreshData());
 
-        JButton searchBtn = new JButton("Search");
-        searchBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        searchBtn.addActionListener(e -> refreshData());
-
         statusFilterCombo = new JComboBox<>(new String[]{"ALL", "ACTIVE", "INACTIVE"});
-        statusFilterCombo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        statusFilterCombo.setFont(com.fitcore.ui.theme.Theme.font(12));
+        statusFilterCombo.setBackground(com.fitcore.ui.theme.Theme.BG_INPUT);
+        statusFilterCombo.setForeground(com.fitcore.ui.theme.Theme.TEXT_PRIMARY);
         statusFilterCombo.addActionListener(e -> refreshData());
 
-        searchBox.add(new JLabel("Status:"));
+        JLabel filterLabel = new JLabel("Status:");
+        filterLabel.setFont(com.fitcore.ui.theme.Theme.bold(11));
+        filterLabel.setForeground(com.fitcore.ui.theme.Theme.TEXT_SECONDARY);
+
+        searchBox.add(filterLabel);
         searchBox.add(statusFilterCombo);
         searchBox.add(searchField);
+
+        JButton searchBtn = com.fitcore.ui.theme.Theme.createGhostButton("Search");
+        searchBtn.addActionListener(e -> refreshData());
         searchBox.add(searchBtn);
         titleRow.add(searchBox, BorderLayout.EAST);
 
         JPanel actionRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         actionRow.setOpaque(false);
 
-        JButton addBtn = createActionButton("+ Add Trainer", new Color(37, 99, 235), Color.WHITE);
+        JButton addBtn = com.fitcore.ui.theme.Theme.createPrimaryButton("➕  Add Trainer");
         addBtn.addActionListener(e -> onAddTrainer());
 
-        JButton editBtn = createActionButton("✏ Edit Trainer", new Color(241, 245, 249), new Color(30, 41, 59));
+        JButton editBtn = com.fitcore.ui.theme.Theme.createGhostButton("✏  Edit Details");
         editBtn.addActionListener(e -> onEditTrainer());
 
-        JButton viewMembersBtn = createActionButton("🏋 View Assigned Members", new Color(15, 23, 42), Color.WHITE);
+        JButton viewMembersBtn = com.fitcore.ui.theme.Theme.createGhostButton("🏋  Assigned Athletes");
         viewMembersBtn.addActionListener(e -> onViewAssignedMembers());
 
-        JButton toggleBtn = createActionButton("🔄 Toggle Status", new Color(241, 245, 249), new Color(30, 41, 59));
+        JButton toggleBtn = com.fitcore.ui.theme.Theme.createGhostButton("🔄  Toggle Status");
         toggleBtn.addActionListener(e -> onToggleStatus());
 
-        JButton exportBtn = createActionButton("📥 Export CSV", new Color(241, 245, 249), new Color(30, 41, 59));
+        JButton exportBtn = com.fitcore.ui.theme.Theme.createGhostButton("📥  Export CSV");
         exportBtn.addActionListener(e -> ExportUtil.exportTableToCsv(this, table, "FitCore_Trainers_Roster"));
 
         actionRow.add(addBtn);
@@ -105,7 +118,7 @@ public class TrainerManagementPanel extends JPanel {
 
     private JPanel createTablePanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(com.fitcore.ui.theme.Theme.BG_CARD);
 
         tableModel = new DefaultTableModel(
                 new String[]{"Trainer Code", "Trainer Name", "Phone", "Email", "Specialization", "Assigned Members", "Status"}, 0
@@ -122,7 +135,7 @@ public class TrainerManagementPanel extends JPanel {
                 StatusBadge badge = new StatusBadge(value != null ? value.toString() : "ACTIVE");
                 JPanel p = new JPanel(new GridBagLayout());
                 p.setOpaque(true);
-                p.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? Color.WHITE : new Color(248, 250, 252)));
+                p.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? table.getBackground() : new Color(14, 20, 33)));
                 p.add(badge);
                 return p;
             }
