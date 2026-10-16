@@ -1,0 +1,37 @@
+# Compiled class files
+target/
+*.class
+dependency-reduced-pom.xml
+
+# Log files
+*.log
+logs/
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Environment files
+.env
+application-local.properties
+
+# IDE settings
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+*.suo
+*.user
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Temporary files
+*.tmp
+*.bak

@@ -1,0 +1,123 @@
+erDiagram
+    USERS ||--o| TRAINERS : "links account"
+    USERS ||--o{ AUDIT_LOGS : "generates"
+    TRAINERS ||--o{ MEMBERS : "mentors (primary)"
+    TRAINERS ||--o{ TRAINER_ASSIGNMENTS : "assigned to"
+    MEMBERS ||--o{ TRAINER_ASSIGNMENTS : "participates in"
+    MEMBERS ||--o{ MEMBERSHIPS : "subscribes"
+    MEMBERSHIP_PLANS ||--o{ MEMBERSHIPS : "defines"
+    MEMBERSHIPS ||--o| MEMBERSHIPS : "renews from"
+    MEMBERS ||--o{ ATTENDANCE : "logs check-in"
+    MEMBERS ||--o{ PAYMENTS : "remits"
+    MEMBERSHIPS ||--o{ PAYMENTS : "bills for"
+
+    USERS {
+        int id PK
+        string username UK
+        string password_hash
+        string full_name
+        string email UK
+        enum role "ADMIN, RECEPTIONIST, TRAINER"
+        enum status "ACTIVE, INACTIVE"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    TRAINERS {
+        int id PK
+        int user_id FK "nullable"
+        string trainer_code UK
+        string name
+        string phone
+        string email UK
+        string specialization
+        enum status "ACTIVE, INACTIVE"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    MEMBERSHIP_PLANS {
+        int id PK
+        string plan_code UK
+        string name
+        int duration_days
+        decimal fee
+        string description
+        enum status "ACTIVE, INACTIVE"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    MEMBERS {
+        int id PK
+        string member_code UK
+        string full_name
+        string phone
+        string email
+        string gender
+        string emergency_contact
+        date joining_date
+        int assigned_trainer_id FK "nullable"
+        enum status "ACTIVE, INACTIVE"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    TRAINER_ASSIGNMENTS {
+        int id PK
+        int member_id FK
+        int trainer_id FK
+        date assigned_date
+        date unassigned_date
+        string notes
+        timestamp created_at
+    }
+
+    MEMBERSHIPS {
+        int id PK
+        string membership_code UK
+        int member_id FK
+        int plan_id FK
+        date start_date
+        date end_date
+        decimal agreed_fee
+        enum status "ACTIVE, EXPIRED, UPCOMING, CANCELLED"
+        int renewed_from_id FK "nullable"
+        string notes
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    ATTENDANCE {
+        int id PK
+        int member_id FK
+        timestamp check_in_time
+        date check_in_date
+        string notes
+        timestamp created_at
+    }
+
+    PAYMENTS {
+        int id PK
+        string payment_code UK
+        int member_id FK
+        int membership_id FK "nullable"
+        decimal amount
+        timestamp payment_date
+        enum payment_method "CASH, UPI, CARD, BANK_TRANSFER"
+        enum payment_status "SUCCESS, PENDING, FAILED, REFUNDED"
+        string transaction_reference UK "nullable"
+        string receipt_notes
+        timestamp created_at
+    }
+
+    AUDIT_LOGS {
+        int id PK
+        int user_id FK "nullable"
+        string username
+        string action
+        string entity_type
+        string entity_id
+        string details
+        timestamp created_at
+    }

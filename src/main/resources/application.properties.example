@@ -1,0 +1,34 @@
+# ========================================================
+# FitCore Pro - Application Configuration (Example)
+# Rename to application.properties or override with Environment variables
+# ========================================================
+
+# Relational Database Connection (MySQL / MariaDB)
+db.host=localhost
+db.port=3306
+db.name=fitcore_pro
+db.username=root
+db.password=
+db.useSSL=false
+db.allowPublicKeyRetrieval=true
+db.serverTimezone=UTC
+
+# HikariCP Connection Pool Configuration
+db.pool.maximumSize=10
+db.pool.minimumIdle=2
+db.pool.connectionTimeout=30000
+db.pool.idleTimeout=600000
+db.pool.maxLifetime=1800000
+
+# Gym Business Information
+gym.name=FitCore Pro Health & Fitness Club
+gym.tagline=Elevate Your Strength, Fuel Your Life
+gym.address=108 Fitness Boulevard, Suite 400, Metro City
+gym.phone=+1 (800) 555-CORE
+gym.email=contact@fitcorepro.com
+gym.currency=USD
+gym.currencySymbol=$
+
+# Attendance Rules
+attendance.allowSingleCheckInPerDay=true
+attendance.requireActiveMembership=true
